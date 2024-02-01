@@ -12,7 +12,7 @@ How to Train
 -------------
 
 With ```predictability_measure``` as the working directory execute the python script
-```python main.py model=default```
+```python main.py```
 
 
 Datasets
