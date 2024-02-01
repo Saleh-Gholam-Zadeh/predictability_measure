@@ -15,17 +15,6 @@ Pytorch code for ICML 2024 submission [Towards measuring predictability]
 All the required packages can be installed using the following command:
 
 ```
-pip install --upgrade pip
-conda create --name predictability python=3.10
-conda activate predictability
-pip3 install -r requirements.txt
-```
-
-# Requirements
-
-All the required packages can be installed using the following command:
-
-```
 conda create --name predictability
 conda activate predictability
 pip3 install -r requirements.txt
