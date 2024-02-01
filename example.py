@@ -1,5 +1,4 @@
 
-
 import sys
 import matplotlib.pyplot as plt
 
@@ -18,9 +17,9 @@ from transformer_architecture.models.Transformer_Longterm import  LongTermModel,
 from transformer_architecture.ns_models.ns_Transformer import  Model, NS_TSConfig
 from mlp_arcitecture.mlp_arch import MLP
 from  utils.dataProcess import ts2batch_ctx_tar
-from chisquare import chisquare_test
-from pearson import pearson_test
-from Mutual_information import get_mutual_information
+from ChiSquareMeasure.ChiSquare import chisquare_test
+from PearsonCorrelation_Measure.pearson import pearson_test
+from MutualInformationMeasure.Mutual_information import get_mutual_information
 
 import csv
 import yaml
@@ -82,7 +81,7 @@ cfg["learn"]["save_path"]= os.path.join(os.getcwd(),'saved_models',str(cfg["lear
 
 """Data"""
 # Specify the file path
-file_path = 'sample_data.csv'
+file_path = 'data/sample_data.csv'
 
 # Reading from CSV file
 with open(file_path, 'r') as csvfile:

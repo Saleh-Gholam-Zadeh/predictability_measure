@@ -1,31 +1,34 @@
-In folder ```Mutual_information_measure``` one can find our implemetation of Mutual information measure.
+In folder ```MutualInformationMeasure``` one can find our implemetation of Mutual information measure.
 
-In folder ```Chi_square_measure``` one can find our implemetation of Chi-square measure.
+In folder ```ChiSquareMeasure``` one can find our implemetation of Chi square measure
 
-In folder ```pearson_correlation_measure``` one can find our implemetation of Pearson correlation measure.
+In folder ```PearsonCorrelationMeasure``` one can find our implemetation of Pearson correlation measure
 
-In folder ```Example```, you will find a small working example to evaluate the information content between input and output and after training a model (MLP or Non-stationary transformer), it is evaluated how much information the residuals share with the input.
+In the file ```example.py```, you will find a small working example to evaluate the information content between input and output and after training a model (MLP or Non-stationary transformer), it is evaluated how much information the residuals share with the input.
 
 
 # Towards measuring predictability
-Pytorch code for ICML 2024 paper [Towards measuring predictability]
+Pytorch code for ICML 2024 submission [Towards measuring predictability]
 
-Dependencies
---------------
-* torch==1.3.1
-* python 3.7
-* PyYAML==5.3
+# Requirements
+
+All requirements are listed in ```requirements.txt```.
+
+Example installation:
+```
+pip3 install -r requirements.txt
+```
 
 
 How to Train
 -------------
 
 With ```predictability_measure``` as the working directory execute the python script
-```python main.py```
+```python example.py```
 
 
 Datasets
 ------------
-We have provided a sample csv file including a sinusoid plus noise
+We have provided a sample csv file including a sinusoid plus noise in the data folder.
 
 
