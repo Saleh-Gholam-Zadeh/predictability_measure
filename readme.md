@@ -1,6 +1,8 @@
-In folder ```Mutual_information_measure``` one can find our implemetation of Mutual information measure
-In folder ```Chi_square_measure``` one can find our implemetation of Chi-square measure
-In folder ```pearson_correlation_measure``` one can find our implemetation of Pearson correlation measure
+In folder ```Mutual_information_measure``` one can find our implemetation of Mutual information measure.
+
+In folder ```Chi_square_measure``` one can find our implemetation of Chi-square measure.
+
+In folder ```pearson_correlation_measure``` one can find our implemetation of Pearson correlation measure.
 
 In folder ```Example```, you will find a small working example to evaluate the information content between input and output and after training a model (MLP or Non-stationary transformer), it is evaluated how much information the residuals share with the input.
 
