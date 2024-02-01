@@ -21,13 +21,15 @@ conda activate predictability
 pip3 install -r requirements.txt
 ```
 
-# Dependencies
+# Requirements
 
-- Python >=3.6
-- scipy==1.10.1
-- matplotlib==3.7.4
-- pandas==2.0.3
-- torch==2.2.0
+All the required packages can be installed using the following command:
+
+```
+conda create --name predictability
+conda activate predictability
+pip3 install -r requirements.txt
+```
 
 
 How to Train
