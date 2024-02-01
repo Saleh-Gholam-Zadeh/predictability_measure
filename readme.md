@@ -10,15 +10,13 @@ In the file ```example.py```, you will find a small working example to evaluate 
 # Towards measuring predictability
 Pytorch code for ICML 2024 submission [Towards measuring predictability]
 
-# Requirements
+# Dependencies
 
-All requirements are listed in ```requirements.txt```.
-
-Example installation:
-```
-pip install --upgrade pip
-pip3 install -r requirements.txt
-```
+- Python >=3.6
+- mscipy==1.10.1
+- matplotlib==3.7.4
+- pandas==2.0.3
+- torch==2.2.0
 
 
 How to Train
