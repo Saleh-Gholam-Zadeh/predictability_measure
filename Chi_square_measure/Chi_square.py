@@ -128,4 +128,3 @@ def chisquare_test(data: np.ndarray, min_n_datapoints_a_bin = None, number_outpu
 
 
     return intermediate_list_depending_on_system_state,pval_list,cnt_dep
-

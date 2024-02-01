@@ -151,4 +151,3 @@ def get_mutual_information(data, number_output_functions=1, min_n_datapoints_a_b
         avg_MI_permute = sum(total_MI_for_each_permutation) / len(total_MI_for_each_permutation)
         pvalue = np.sum(np.array(total_MI_for_each_permutation) > actual_total_MI)/len(total_MI_for_each_permutation)
         return None,                actual_total_MI, pvalue, avg_MI_permute  ,total_MI_for_each_permutation
-
