@@ -16,6 +16,7 @@ All requirements are listed in ```requirements.txt```.
 
 Example installation:
 ```
+pip install --upgrade pip
 pip3 install -r requirements.txt
 ```
 

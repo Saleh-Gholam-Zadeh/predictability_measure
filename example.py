@@ -18,7 +18,7 @@ from transformer_architecture.ns_models.ns_Transformer import  Model, NS_TSConfi
 from mlp_arcitecture.mlp_arch import MLP
 from  utils.dataProcess import ts2batch_ctx_tar
 from ChiSquareMeasure.ChiSquare import chisquare_test
-from PearsonCorrelation_Measure.pearson import pearson_test
+from PearsonCorrelationMeasure.pearson import pearson_test
 from MutualInformationMeasure.Mutual_information import get_mutual_information
 
 import csv
