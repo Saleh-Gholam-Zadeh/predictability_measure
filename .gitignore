@@ -1,0 +1,40 @@
+**/*.log
+**/*.pickle
+**/*.ckpt
+**/*.wandb
+**/*.json
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+
+# IDE files
+.idea/
+.vscode/
+
+# Compiled source
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Other files and directories to ignore
+.DS_Store
+.cache/
+.pytest_cache/
+# Add more files or directories as needed
+
+
+
+
