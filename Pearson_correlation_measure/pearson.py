@@ -4,16 +4,6 @@ import scipy.stats
 import pandas as pd
 import math
 
-def convert_to_numpy(data):
-    if isinstance(data, np.ndarray):
-        # If it's already a NumPy array, no conversion needed
-        return data
-    elif isinstance(data, torch.Tensor):
-        # If it's a PyTorch tensor, convert it to a NumPy array
-        return data.numpy()
-    else:
-        raise ValueError("Input data must be either a NumPy array or a PyTorch tensor")
-
 
 def pearson_test(arr ,tresh: float = 0.01, number_output_functions: int=1,bonfer = True):
 
@@ -36,7 +26,6 @@ def pearson_test(arr ,tresh: float = 0.01, number_output_functions: int=1,bonfer
     return p-value and r va
     '''
 
-    arr=convert_to_numpy(arr)
     assert isinstance(tresh, float), "Variable is not of type float"
     assert len(arr.shape)==2
     m,n = arr.shape
@@ -57,4 +46,3 @@ def pearson_test(arr ,tresh: float = 0.01, number_output_functions: int=1,bonfer
                 #print(i," pv:",pv,"  r:", r)
                 sum_r = sum_r + np.abs(r)
     return sum_r
-
