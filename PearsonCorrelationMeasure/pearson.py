@@ -36,7 +36,6 @@ def pearson_test(arr ,tresh: float = 0.01, number_output_functions: int=1,bonfer
     Y = arr[:number_output_functions,:] # labels
     res = []
     sum_r = 0
-    print(tresh)
     for i in range(number_output_functions): # for loop on y
         for j in range(m-number_output_functions): # for loop on x --> all corelations between xi and yj will be considered
             r , pv = (scipy.stats.pearsonr(X_mat[j,:],Y[i,:]))
