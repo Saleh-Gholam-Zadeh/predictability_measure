@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
 
     # Create a list of parameter tuples for each job
-    print("starting parallel chisquare")
+    print("starting parallel Pearsonr")
     t1 = time.time()
     sum_r = parallel_perasonr(operational_data,number_output_functions= number_output_functions)
     print("correl:",sum_r)
