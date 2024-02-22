@@ -28,9 +28,24 @@ random.seed(2)
 np.random.seed(2)
 
 
+def convert_to_numpy(data):
+    if isinstance(data, np.ndarray):
+        # If it's already a NumPy array, no conversion needed
+        return data
+    elif isinstance(data, torch.Tensor):
+        # If it's a PyTorch tensor, convert it to a NumPy array
+        return data.numpy()
+    else:
+        return data
+        #raise ValueError("Input data must be either a NumPy array or a PyTorch tensor")
+
+
 
 # Define a function to compute PearsonR correlation for a given pair of indices (i, j)
-def compute_mapped_pearsonr(batch_pair):
+def compute_batched_pearsonr(batch_pair):
+    '''
+    pairwise calcualtions for 1 batch of pairs
+    '''
     #print("inside the func ---> len(batch_pair):",len(batch_pair))
     pairs, X_mat, Y = batch_pair
     res = []
@@ -41,9 +56,10 @@ def compute_mapped_pearsonr(batch_pair):
     return res
 
 
-def mapped_linear_correl(arr ,tresh = 0.01, number_output_functions=1,bonfer = True,batch_size = -1):
+def parallel_perasonr(arr ,tresh = 0.01, number_output_functions=1,bonfer = True,batch_size = -1):
 
     '''
+
     implementation of PearsonR correlation
     m = data.shape[0]  # number of features (or more precisely features + outputs )
     n = data.shape[1]  # number of data points (windows)
@@ -60,7 +76,7 @@ def mapped_linear_correl(arr ,tresh = 0.01, number_output_functions=1,bonfer = T
     Y = arr[-number_output_functions:,:] # labels
     res = []
     sum_r = 0
-    print(tresh)
+    print("treshold:",tresh)
 
 
     pairs = [(i, j ) for i in range(number_output_functions) for j in range(m - number_output_functions)]
@@ -78,7 +94,7 @@ def mapped_linear_correl(arr ,tresh = 0.01, number_output_functions=1,bonfer = T
     # Map the compute_pearsonr function to the pairs of indices
     # Use multiprocessing to parallelize computation
     with Pool() as pool:
-        results = pool.map(compute_mapped_pearsonr, input_to_parallel_pearson)
+        results = pool.map(compute_batched_pearsonr, input_to_parallel_pearson)
 
 
     #results = map(compute_mapped_pearsonr, input_to_parallel_pearson)
@@ -89,6 +105,41 @@ def mapped_linear_correl(arr ,tresh = 0.01, number_output_functions=1,bonfer = T
                 sum_r+=np.abs(r)
 
     return sum_r
+
+if __name__ == "__main__":
+
+    torch.manual_seed(2)
+    random.seed(2)
+    np.random.seed(2)
+
+    print("Testing Multi-Process")
+    ctx_len = 100
+    tar_len = 5
+    n_features = 1
+    B = 20000
+
+    number_output_functions = tar_len * n_features
+
+    # Number of jobs is set to the number of CPU cores
+    #num_jobs = num_cpus
+
+
+    noise    = white_noise(B,(ctx_len+tar_len)*n_features).reshape(B,(ctx_len+tar_len)*n_features) ## a timeseries of shape [B,70,1]
+    clean_signal = sin_gen(B,(ctx_len+tar_len)*n_features).reshape(B,(ctx_len+tar_len)*n_features) # a timeseries of shape [B,70,1]
+    operational_data = 0.2 * noise +  clean_signal # a timeseries of shape [B,70,1]
+    #print(operational_data.shape)
+
+
+    # Create a list of parameter tuples for each job
+    print("starting parallel chisquare")
+    t1 = time.time()
+    sum_r = parallel_perasonr(operational_data,number_output_functions= number_output_functions)
+    print("correl:",sum_r)
+
+    t2 = time.time()
+    print("Took:",t2-t1)
+
+
 
 
 
