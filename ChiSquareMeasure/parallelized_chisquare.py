@@ -95,7 +95,7 @@ def compute_pairwise_chisq(batch):
     #return (j, id_output), dependent, pv , bins_less_than5 ,bins_less_than1
     return results
 
-def run_parallel_test(data ,min_n_datapoints_a_bin = None, number_output_functions=1 , alpha=0.01  ,bonfer= True):
+def run_parallel_chisquare_test(data ,min_n_datapoints_a_bin = None, number_output_functions=1 , alpha=0.01  ,bonfer= True):
 
     '''
         Implementation of MI code
@@ -247,16 +247,12 @@ if __name__ == "__main__":
     np.random.seed(2)
 
     print("Testing Multi-Process")
-    ctx_len = 190
-    tar_len = 720
+    ctx_len = 100
+    tar_len = 5
     n_features = 1
     B = 20000
-    N = 5
-    num_ijn_cpus =None
-
 
     number_output_functions = tar_len * n_features
-    perm_test_flag = True
 
     # Number of jobs is set to the number of CPU cores
     #num_jobs = num_cpus
@@ -267,4 +263,28 @@ if __name__ == "__main__":
     operational_data = 0.2 * noise +  clean_signal # a timeseries of shape [B,70,1]
     #print(operational_data.shape)
 
-    operational_data = operational_data.swapaxes(0, 1) # then circular shift then pass it to run parallel test
+
+    def circular_shift_features(data, t):
+        # m = data.shape[0]  # number of features
+        # n = data.shape[1]  # number of data points
+
+        # Perform circular shift on the features
+        shifted_data = np.roll(data, t, axis=0)
+
+        return shifted_data
+
+    operational_data = circular_shift_features( operational_data.swapaxes(0, 1), number_output_functions)
+    #print("parallel binning...")
+
+    # Create a list of parameter tuples for each job
+    print("starting parallel chisquare")
+    t1 = time.time()
+    dep_list, pval, bin1,bin5 = run_parallel_chisquare_test(operational_data,number_output_functions= number_output_functions)
+    print("dep_pairs (i,j):",dep_list)
+    print("(pvl,i,j):",pval)
+    print("bin_less_than_5:",bin5)
+    print("bin_less_than_1:", bin1)
+    t2 = time.time()
+    print(t2-t1)
+
+
