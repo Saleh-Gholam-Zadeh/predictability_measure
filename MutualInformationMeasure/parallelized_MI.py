@@ -61,9 +61,11 @@ def mapped_make_summand_from_frequencies(params):
 
 
 def compute_pairwise_MI_batched(batch):
+    '''
+    compute MI for a batch of i-j pairs
+    '''
     data_x, freq_data, l, number_output_functions, n, left_features, should_permute, counter,pairs_batch  = batch
     permed_data_x = data_x.copy()
-
 
 
     results = []
@@ -85,8 +87,9 @@ def compute_pairwise_MI_batched(batch):
 
 
 
-def get_parallel_ijn_mutual_information(data, number_output_functions=1, min_n_datapoints_a_bin = None, perm_test_flag=True,cnt=None , num_op_cpus=None):
+def calculate_MI_job(data, number_output_functions=1, min_n_datapoints_a_bin = None, perm_test_flag=True,cnt=None , num_op_cpus=None):
     '''
+    Recives one job (fixed cnt and all i-j pairs) and outsource it to compute_pairwise_MI_batched to run on many cpus
     Important Notes:
 
     1)we dont Need N in this function. cnt does the job. we removed for loop over N. N is determined outside.
@@ -210,7 +213,6 @@ def get_parallel_ijn_mutual_information(data, number_output_functions=1, min_n_d
         should_I_permute = perm_test_flag and (cnt!=0)
 
 
-
         # Divide pairs into batches
         pairs_batches = [pairs[i:i + batch_size] for i in range(0, len(pairs), batch_size)]
         data_batch = [(data, freq_data, l, number_output_functions, n, left_features, should_I_permute, cnt,batch_pair) for batch_pair in pairs_batches]
@@ -239,26 +241,27 @@ def get_parallel_ijn_mutual_information(data, number_output_functions=1, min_n_d
         else:
             #avg_MI_permute = sum(total_MI_for_this_permutation) / len(total_MI_for_this_permutation)
 
-
             return  None, None, None, None, total_MI_for_this_permutation ,cnt
 
 
-def get_parallel_ijn_mutual_information_wrapper(params):
+def calculate_MI_job_wrapper(params):
+    '''
+    extract params into several variables and pass it to the next function
+    '''
     data, number_output_functions, min_n_datapoints_a_bin, perm_test_flag, cnt, n_cpus = params
     #print("cnt_ijn_started:",cnt , " with {} CPUS".format(n_cpus))
-    return get_parallel_ijn_mutual_information(data, number_output_functions, min_n_datapoints_a_bin,perm_test_flag, cnt, num_op_cpus=n_cpus)
+    #return get_parallel_ijn_mutual_information(data, number_output_functions, min_n_datapoints_a_bin,perm_test_flag, cnt, num_op_cpus=n_cpus)
+    return calculate_MI_job(data, number_output_functions, min_n_datapoints_a_bin,perm_test_flag, cnt, num_op_cpus=n_cpus)
 
-    # Define a function to execute each job
+# Define a function to execute each job
 def execute_job(params):
-    return get_parallel_ijn_mutual_information_wrapper(params)
+    return calculate_MI_job_wrapper(params)
 
-def submit_MI_ijn_jobs(operational_data,number_output_functions,perm_test_flag,N,num_cpus=None):
+def get_parallel_MI(operational_data,number_output_functions,perm_test_flag,N,num_cpus=None):
 
     if num_cpus ==None or num_cpus > multiprocessing.cpu_count() - 1:
-        #num_cpus = int(multiprocessing.cpu_count() *0.9)
-        #num_cpus = 4#int(multiprocessing.cpu_count() * 0.95)
         num_cpus = max(int(multiprocessing.cpu_count()//8) ,1)
-    print("available cpus to submit_MI_ijn_jobs:",num_cpus)
+    print("available cpus to submit a job in get_parallel_MI():",num_cpus)
 
     # Calculate the threshold load for each CPU
     threshold_load = calculate_threshold_load(multiprocessing.cpu_count() *0.95)
@@ -290,7 +293,6 @@ def submit_MI_ijn_jobs(operational_data,number_output_functions,perm_test_flag,N
 
 
     concurrent.futures.wait(futures)
-
 
 
     # Extract results from completed jobs if needed
@@ -345,8 +347,8 @@ if __name__ == "__main__":
     np.random.seed(2)
 
     print("Testing Multi-Process")
-    ctx_len = 190
-    tar_len = 720
+    ctx_len = 50
+    tar_len = 50
     n_features = 1
     B = 20000
     N = 5
@@ -379,7 +381,7 @@ if __name__ == "__main__":
     # Create a list of parameter tuples for each job
     print("starting parallel IJN")
     t1 = time.time()
-    _, actual_ijn_MI, pval_ijn, _, perm_list_ijn = submit_MI_ijn_jobs(operational_data, number_output_functions, perm_test_flag, N ,num_cpus=num_ijn_cpus)
+    _, actual_ijn_MI, pval_ijn, _, perm_list_ijn = get_parallel_MI(operational_data, number_output_functions, perm_test_flag, N ,num_cpus=num_ijn_cpus)
     t2 = time.time()
     #
 
