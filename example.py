@@ -48,7 +48,7 @@ def convert_to_numpy(data):
 
 config = """
 learn:
-  epochs: 5
+  epochs: 40
   batch_size: 450
   lr: 0.0001
   save_model: True
@@ -90,6 +90,9 @@ with open(file_path, 'r') as csvfile:
     # Convert the CSV data into a list
     data = np.array([row for row in csv_reader], dtype=np.float32)
 
+#print("data.shape:",data.shape)
+
+
 plt.plot(data[:100])
 plt.show()
 #
@@ -105,6 +108,7 @@ test_data  = data[l:,:]
 train_batched,_ = ts2batch_ctx_tar(train_data,n_batch=1000,len_ctx=cfg["data_reader"]["context_size"] , len_tar=cfg["data_reader"]["pred_len"])
 test_batched,_  = ts2batch_ctx_tar(test_data,n_batch=1000,len_ctx=cfg["data_reader"]["context_size"] , len_tar=cfg["data_reader"]["pred_len"])
 
+print("train_batched.shape:", train_batched.shape)
 
 #### building Model######
 transformer_e_layers = cfg["transformer_arch"]["enc_layer"]
@@ -149,19 +153,19 @@ input_to_predictability_measures_train_data  = circular_shift_features( convert_
 
 print("=========================  initial Chi-square test & train  ===================================")
 
-results0, pvl0, cnt_dep0 = chisquare_test(input_to_predictability_measures_test_data ,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
-results1, pvl1,cnt_dep1 = chisquare_test(input_to_predictability_measures_train_data,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
+results0, pvl0, cnt_dep0,_,_ = chisquare_test(input_to_predictability_measures_test_data ,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
+results1, pvl1,cnt_dep1,_,_ = chisquare_test(input_to_predictability_measures_train_data,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
 
 print("=========================  initial MI test & train  ===================================")
 
 ############
-_, SUM_MI_initial_test, init_MI_pv_test, avg_MI_initial_test_permute, SUM_MI_initial_test_permuted = get_mutual_information(input_to_predictability_measures_test_data, number_output_functions=cfg["data_reader"]["pred_len"], perm_test_flag=True, N=100)
+_, SUM_MI_initial_test, init_MI_pv_test, avg_MI_initial_test_permute, SUM_MI_initial_test_permuted = get_mutual_information(input_to_predictability_measures_test_data, number_output_functions=cfg["data_reader"]["pred_len"], perm_test_flag=True, N=300)
 print('SUM_MI_initial_test:', SUM_MI_initial_test)
 print("SUM_MI_initial_test_permuted", SUM_MI_initial_test_permuted)
 print("initial MI is less than", init_MI_pv_test ,"% of the MI in a random permutations")
 
 
-_, SUM_MI_initial_train, init_MI_pv_train, avg_MI_initial_train_permute, SUM_MI_initial_train_permuted = get_mutual_information(input_to_predictability_measures_train_data, number_output_functions=cfg["data_reader"]["pred_len"], perm_test_flag=True, N=100)
+_, SUM_MI_initial_train, init_MI_pv_train, avg_MI_initial_train_permute, SUM_MI_initial_train_permuted = get_mutual_information(input_to_predictability_measures_train_data, number_output_functions=cfg["data_reader"]["pred_len"], perm_test_flag=True, N=300)
 print('SUM_MI_initial_test:', SUM_MI_initial_test)
 print("SUM_MI_initial_test_permuted", SUM_MI_initial_test_permuted)
 print("initial MI is less than", init_MI_pv_test ,"% of the MI in a random permutations")
@@ -217,16 +221,16 @@ input_to_predictability_measures_train_data  = circular_shift_features( convert_
 
 
 print(" ======================chi-square on residual_test:=============================")
-results2, pvl2 ,cnt_dep2 = chisquare_test(input_to_predictability_measures_test_data,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
+results2, pvl2 ,cnt_dep2,_,_ = chisquare_test(input_to_predictability_measures_test_data,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
 
-results3, pvl3, cnt_dep3 = chisquare_test(input_to_predictability_measures_train_data,number_output_functions= cfg["data_reader"]["pred_len"], bonfer=True)
+results3, pvl3, cnt_dep3,_,_ = chisquare_test(input_to_predictability_measures_train_data,number_output_functions= cfg["data_reader"]["pred_len"], bonfer=True)
 
 
 print("=========================MI and permutation on residual_test ============================")
 
 
-_, sum_res_test ,  res_MI_pv_test,   avg_MI_res_test_permute, sum_res_test_permuted = get_mutual_information(input_to_predictability_measures_test_data, number_output_functions=cfg["data_reader"]["pred_len"], perm_test_flag=True, N=100)
-_, sum_res_train , res_MI_pv_train, avg_MI_res_train_permute, sum_res_train_permuted = get_mutual_information(input_to_predictability_measures_train_data, number_output_functions=cfg["data_reader"]["pred_len"], perm_test_flag=True, N=100)
+_, sum_res_test ,  res_MI_pv_test,   avg_MI_res_test_permute, sum_res_test_permuted = get_mutual_information(input_to_predictability_measures_test_data, number_output_functions=cfg["data_reader"]["pred_len"], perm_test_flag=True, N=300)
+_, sum_res_train , res_MI_pv_train, avg_MI_res_train_permute, sum_res_train_permuted = get_mutual_information(input_to_predictability_measures_train_data, number_output_functions=cfg["data_reader"]["pred_len"], perm_test_flag=True, N=300)
 
 print("==================================== Pearson on test_res ===================================")
 #input_to_pearson=circular_shift_features(residual_ctx_and_tar_te.squeeze().swapaxes(0, 1),t=cfg["learn"]["pred_len"])

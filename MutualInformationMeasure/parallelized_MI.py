@@ -10,9 +10,9 @@ from multiprocessing import Pool
 
 import numpy as np
 import sys
-print(sys.path)
+#print(sys.path)
 sys.path.append(os.getcwd())
-print(sys.path)
+#print(sys.path)
 import random
 from utils.synthetic_data_gen import sin_gen , white_noise
 import math
@@ -99,7 +99,7 @@ def calculate_MI_job(data, number_output_functions=1, min_n_datapoints_a_bin = N
     '''
     ts = time.time()
     if num_op_cpus ==None or num_op_cpus > multiprocessing.cpu_count() -1:
-        num_op_cpus = int(multiprocessing.cpu_count()*0.95)
+        num_op_cpus = int(multiprocessing.cpu_count()-1)
 
     print("________________________________________________________________________________________________")
     print("started cnt:{} and num_op_cpus:{}".format(cnt,num_op_cpus))
@@ -192,9 +192,9 @@ def calculate_MI_job(data, number_output_functions=1, min_n_datapoints_a_bin = N
 
 
     # Determine the start and end CPUs for CPU affinity
-    start_cpu = cnt  * num_op_cpus % multiprocessing.cpu_count() +1
-    if start_cpu>=multiprocessing.cpu_count():
-        start_cpu = 1
+    # start_cpu = cnt  * num_op_cpus % multiprocessing.cpu_count() +1
+    # if start_cpu>=multiprocessing.cpu_count():
+    #     start_cpu = 1
 
 
 
@@ -260,8 +260,8 @@ def execute_job(params):
 def get_parallel_MI(operational_data,number_output_functions,perm_test_flag,N,num_cpus=None):
 
     if num_cpus ==None or num_cpus > multiprocessing.cpu_count() - 1:
-        num_cpus = max(int(multiprocessing.cpu_count()//8) ,1)
-    print("available cpus to submit a job in get_parallel_MI():",num_cpus)
+        num_cpus = max(int(multiprocessing.cpu_count()//2) ,1)
+    # print("available cpus to submit a job in get_parallel_MI():",num_cpus)
 
     # Calculate the threshold load for each CPU
     threshold_load = calculate_threshold_load(multiprocessing.cpu_count() *0.95)
@@ -281,13 +281,13 @@ def get_parallel_MI(operational_data,number_output_functions,perm_test_flag,N,nu
 
             while not is_safe_to_start_job(cpu_usage, threshold_load):
                 #time.sleep(0.01)
-                print("we can NOT submit a new Job since cpu_usage{} is More than treshold{}".format(cpu_usage,threshold_load))
+                # print("we can NOT submit a new Job since cpu_usage{} is More than treshold{}".format(cpu_usage,threshold_load))
                 cpu_usage = get_cpu_usage(threshold_load=threshold_load)
-                if(is_safe_to_start_job(cpu_usage, threshold_load)):
-                    print("we can submit a new Job since cpu_usage{} is less than treshold{}".format(cpu_usage,threshold_load))
+                # if(is_safe_to_start_job(cpu_usage, threshold_load)):
+                #     print("we can submit a new Job since cpu_usage{} is less than treshold{}".format(cpu_usage,threshold_load))
 
             # Submit the job
-            print("Job submitted .... with cnt:{}".format(params[-2]))
+            # print("Job submitted .... with cnt:{}".format(params[-2]))
             future = executor.submit(execute_job, params)
             futures.append(future)
 
@@ -320,12 +320,15 @@ def get_cpu_usage(threshold_load=None):
 
     if threshold_load is not None:
         if threshold_load<ss:
-            print("cpu_usage:", tt, " ---> avg:", ss,">",threshold_load , "NOT possible to start a new Job")
-            time.sleep(0.2)
+            #print("cpu_usage:", tt, " ---> avg:", ss,">",threshold_load , "NOT possible to start a new Job")
+            #time.sleep(0.2)
+            pass
         else:
-            print("cpu_usage:", tt, " ---> avg:", ss, "<", threshold_load, " Let's Lunch a new job!")
+            #print("cpu_usage:", tt, " ---> avg:", ss, "<", threshold_load, " Let's Lunch a new job!")
+            pass
     else:
-        print("cpu_usage:", tt , " ---> avg:",ss)
+        #print("cpu_usage:", tt , " ---> avg:",ss)
+        pass
     #print("cpu_usage_avg:", ss)
     return ss
 

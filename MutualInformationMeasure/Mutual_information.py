@@ -1,3 +1,5 @@
+import time
+
 import numpy as np
 import pandas as pd
 import math
@@ -105,6 +107,7 @@ def get_mutual_information(data, number_output_functions=1, min_n_datapoints_a_b
 
     total_MI_for_each_permutation = []
     for cnt in range(N):
+        t_start=time.time()
         sum_list =[]
         for i in range(0, number_output_functions):
             basis_log_mutual_information = len(freq_data[i])
@@ -143,7 +146,8 @@ def get_mutual_information(data, number_output_functions=1, min_n_datapoints_a_b
             actual_list_of_df = list_of_data_frames  # we can return this instead of None
         else: # permutation test ---> values come to the list to make a distribution:
             total_MI_for_each_permutation.append(sum(sum_list))
-
+        t_end=time.time()
+        print("cnt:", cnt, "Took:",t_end-t_start)
 
     if perm_test_flag==False:
         return list_of_data_frames, actual_total_MI,None   ,     None       ,         None

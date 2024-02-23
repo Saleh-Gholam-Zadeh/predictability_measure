@@ -10,9 +10,7 @@ from multiprocessing import Pool
 
 import numpy as np
 import sys
-print(sys.path)
 sys.path.append(os.getcwd())
-print(sys.path)
 import random
 from utils.synthetic_data_gen import sin_gen , white_noise
 import math
@@ -76,7 +74,7 @@ def parallel_perasonr(arr ,tresh = 0.01, number_output_functions=1,bonfer = True
     Y = arr[-number_output_functions:,:] # labels
     res = []
     sum_r = 0
-    print("treshold:",tresh)
+    #print("treshold:",tresh)
 
 
     pairs = [(i, j ) for i in range(number_output_functions) for j in range(m - number_output_functions)]

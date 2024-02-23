@@ -127,4 +127,4 @@ def chisquare_test(data: np.ndarray, min_n_datapoints_a_bin = None, number_outpu
         indices_principal_feature_values = np.concatenate((indices_principal_feature_values, np.array([j, pv]).reshape((1, 2))), axis=0)
 
 
-    return intermediate_list_depending_on_system_state,pval_list,cnt_dep
+    return intermediate_list_depending_on_system_state,pval_list,cnt_dep , counter_bins_less_than5_relevant_principal_features, counter_bins_less_than1_relevant_principal_features

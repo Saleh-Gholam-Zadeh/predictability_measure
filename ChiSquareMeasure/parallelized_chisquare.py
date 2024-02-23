@@ -10,9 +10,7 @@ from multiprocessing import Pool
 
 import numpy as np
 import sys
-print(sys.path)
 sys.path.append(os.getcwd())
-print(sys.path)
 import random
 from utils.synthetic_data_gen import sin_gen , white_noise
 import math
