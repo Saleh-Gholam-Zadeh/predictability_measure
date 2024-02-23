@@ -3,3 +3,4 @@ pandas
 PyYAML
 scipy
 torch
+psutil
