@@ -93,7 +93,7 @@ def chisquare_test(data: np.ndarray, min_n_datapoints_a_bin = None, number_outpu
     cnt_dep = 0
 
     for j in range(number_output_functions,m):
-        if len(freq_data[j]) > 1:
+        if (len(freq_data[j]) > 1) and (len(freq_data[id_output])>1):
             dependent = 0 # Flag for the input feature j if there is a relation to one output-function
             for id_output in range(0,number_output_functions):
                 counter_number_chi_square_tests_relevant_principal_features +=1
