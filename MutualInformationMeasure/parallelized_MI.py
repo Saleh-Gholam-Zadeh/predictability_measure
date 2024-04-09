@@ -78,7 +78,7 @@ def compute_pairwise_MI_batched(batch):
         freq_data_product = np.histogram2d(permed_data_x[i, :], permed_data_x[left_features[j], :], bins=(l[i], l[left_features[j]]))[0] / n
         expfreq = np.outer(freq_data[i], freq_data[left_features[j]]) / (n * n)
         basis_log_mutual_information = len(freq_data[i])
-        if((len(freq_data[i]) > 1) and (len(freq_data(left_features[j]) > 1)):
+        if((len(freq_data[i]) > 1) and (len(freq_data[left_features[j]]) > 1)):
             mutual_info = np.sum([mapped_make_summand_from_frequencies((x, y, basis_log_mutual_information)) for x, y in zip(freq_data_product.flatten(), expfreq.flatten())])
         else:
             mutual_info = 0
