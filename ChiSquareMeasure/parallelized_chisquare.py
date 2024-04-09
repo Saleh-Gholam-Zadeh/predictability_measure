@@ -54,7 +54,7 @@ def compute_pairwise_chisq(batch):
         #print("inside_parallel: (j,id_output)",j,id_output)
         bins_less_than5 = 0
         bins_less_than1 = 0
-        if len(freq_data[j]) > 1:
+        if (len(freq_data[j]) > 1) and (len(freq_data[id_output]) > 1):
             dependent = 0
             counter_number_chi_square_tests_relevant_principal_features = 1
 
