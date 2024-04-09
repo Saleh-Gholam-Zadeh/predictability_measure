@@ -133,7 +133,7 @@ def get_mutual_information(data, number_output_functions=1, min_n_datapoints_a_b
                     else:
                         mutual_info[0, 0]=0
                 else:
-                    if((len(freq_data[i])>1) and (len(freq_data[left_features[j])>1)):
+                    if((len(freq_data[i])>1) and (len(freq_data[left_features[j]])>1)):
                         mutual_info[0, j - number_output_functions + 1] = np.sum(np.array(list(
                             map(make_summand_from_frequencies, freq_data_product.flatten().tolist(),
                                 expfreq.flatten().tolist()))))
