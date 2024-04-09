@@ -126,13 +126,19 @@ def get_mutual_information(data, number_output_functions=1, min_n_datapoints_a_b
                 np.histogram2d(data[i, :], data[left_features[j], :], bins=(l[i], l[left_features[j]]))[0])) / n
                 expfreq = (np.outer(freq_data[i], freq_data[left_features[j]])) / (n * n)
                 if j < number_output_functions:
-                    mutual_info[0, 0] = np.sum(np.array(list(
-                        map(make_summand_from_frequencies, freq_data_product.flatten().tolist(),
-                            expfreq.flatten().tolist()))))
+                    if(len(freq_data[i])>1):
+                        mutual_info[0, 0] = np.sum(np.array(list(
+                            map(make_summand_from_frequencies, freq_data_product.flatten().tolist(),
+                                expfreq.flatten().tolist()))))
+                    else:
+                        mutual_info[0, 0]=0
                 else:
-                    mutual_info[0, j - number_output_functions + 1] = np.sum(np.array(list(
-                        map(make_summand_from_frequencies, freq_data_product.flatten().tolist(),
-                            expfreq.flatten().tolist()))))
+                    if((len(freq_data[i])>1) and (len(freq_data[left_features[j])>1)):
+                        mutual_info[0, j - number_output_functions + 1] = np.sum(np.array(list(
+                            map(make_summand_from_frequencies, freq_data_product.flatten().tolist(),
+                                expfreq.flatten().tolist()))))
+                    else:
+                        mutual_info[0, j - number_output_functions + 1] = 0
 
             sum_mi = np.sum(mutual_info[0,1:]) # the sum over all features for each output
             sum_list.append(sum_mi)
