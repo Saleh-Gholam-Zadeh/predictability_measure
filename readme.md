@@ -8,7 +8,7 @@ In the file ```example.py```, you will find a small working example to evaluate 
 
 
 # Towards measuring predictability
-Pytorch code for ICML 2024 submission [Towards measuring predictability]
+For detailed explanations, please see ..., in course of which this repository was developed.
 
 # Requirements
 
