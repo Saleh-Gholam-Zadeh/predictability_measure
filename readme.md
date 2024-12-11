@@ -1,3 +1,5 @@
+# Towards measuring predictability
+
 In folder ```MutualInformationMeasure``` one can find our implemetation of Mutual information measure.
 
 In folder ```ChiSquareMeasure``` one can find our implemetation of Chi square measure
@@ -7,7 +9,8 @@ In folder ```PearsonCorrelationMeasure``` one can find our implemetation of Pear
 In the file ```example.py```, you will find a small working example to evaluate the information content between input and output and after training a model (MLP or Non-stationary transformer), it is evaluated how much information the residuals share with the input.
 
 
-# Towards measuring predictability
+# Theory
+
 For detailed explanations, please see [**Towards Measuring Predictability**](https://openreview.net/forum?id=jZBAVFGUUo&noteId=LEMTDMLbq7)
 , in course of which this repository was developed.
 
@@ -26,7 +29,7 @@ How to Train
 -------------
 
 With ```predictability_measure``` as the working directory execute the python script
-```python example.py```
+```python example.py``` which shows an example of how one can use our code.
 
 
 Datasets
@@ -35,14 +38,19 @@ We have provided a sample csv file including a sinusoid plus noise in the data f
 
 Citation
 ------------
-If you use this repository in your research, please consider citing our work:
+
+If you find our work useful, please consider citing our paper:
 
 ```bibtex
 @article{saleh2024towards,
   title = {Towards Measuring Predictability: To which extent datadriven approaches can extract deterministic relations from data exemplified with time series prediction and classification},
   author = {Saleh, Gholam Zadeh and Vaisakh Shaj and Gerhard Neumann and Tim Breitenbach},
   journal = {Transactions on Machine Learning Research},
-  year = {2024}
+  year = {2024},
+  url = {https://openreview.net/forum?id=jZBAVFGUUo&noteId=LEMTDMLbq7}
 }
+```
+
+Thank you for your support!
 
 
