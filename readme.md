@@ -8,7 +8,8 @@ In the file ```example.py```, you will find a small working example to evaluate 
 
 
 # Towards measuring predictability
-For detailed explanations, please see ..., in course of which this repository was developed.
+For detailed explanations, please see [**Towards Measuring Predictability**](https://openreview.net/forum?id=jZBAVFGUUo&noteId=LEMTDMLbq7)
+, in course of which this repository was developed.
 
 # Requirements
 
