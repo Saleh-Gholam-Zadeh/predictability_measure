@@ -33,4 +33,15 @@ Datasets
 ------------
 We have provided a sample csv file including a sinusoid plus noise in the data folder.
 
+# Citation
+If you use this repository in your research, please consider citing our work:
+
+```bibtex
+@article{saleh2024towards,
+  title = {Towards Measuring Predictability: To which extent datadriven approaches can extract deterministic relations from data exemplified with time series prediction and classification},
+  author = {Saleh, Gholam Zadeh and Vaisakh Shaj and Gerhard Neumann and Tim Breitenbach},
+  journal = {Transactions on Machine Learning Research},
+  year = {2024}
+}
+
 
