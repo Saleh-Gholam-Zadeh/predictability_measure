@@ -33,7 +33,8 @@ Datasets
 ------------
 We have provided a sample csv file including a sinusoid plus noise in the data folder.
 
-# Citation
+Citation
+------------
 If you use this repository in your research, please consider citing our work:
 
 ```bibtex
