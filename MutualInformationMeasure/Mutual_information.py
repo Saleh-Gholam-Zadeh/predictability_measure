@@ -1,5 +1,3 @@
-import time
-
 import numpy as np
 import pandas as pd
 import math
@@ -108,12 +106,7 @@ def get_mutual_information(data, number_output_functions=1, min_n_datapoints_a_b
 
     total_MI_for_each_permutation = []
     for cnt in range(N):
-<<<<<<< HEAD
-        t_start=time.time()
-        sum_list =[]
-=======
         sum_list = []
->>>>>>> 93fe218 (vectorized implementation of MI)
         for i in range(0, number_output_functions):
             basis_log_mutual_information = len(freq_data[i])  # len(discretization of target)
             # shuffle (data [i,:] ) ---> data[i,:]
@@ -131,22 +124,6 @@ def get_mutual_information(data, number_output_functions=1, min_n_datapoints_a_b
                     np.histogram2d(data[i, :], data[left_features[j], :], bins=(l[i], l[left_features[j]]))[0])) / n
                 expfreq = (np.outer(freq_data[i], freq_data[left_features[j]])) / (n * n)
                 if j < number_output_functions:
-<<<<<<< HEAD
-                    if(len(freq_data[i])>1):
-                        mutual_info[0, 0] = np.sum(np.array(list(
-                            map(make_summand_from_frequencies, freq_data_product.flatten().tolist(),
-                                expfreq.flatten().tolist()))))
-                    else:
-                        mutual_info[0, 0]=0
-                else:
-                    if((len(freq_data[i])>1) and (len(freq_data[left_features[j]])>1)):
-                        mutual_info[0, j - number_output_functions + 1] = np.sum(np.array(list(
-                            map(make_summand_from_frequencies, freq_data_product.flatten().tolist(),
-                                expfreq.flatten().tolist()))))
-                    else:
-                        mutual_info[0, j - number_output_functions + 1] = 0
-=======
->>>>>>> 93fe218 (vectorized implementation of MI)
 
                     mutual_info[0, 0]  = compute_normalized_mutual_information_np(freq_data_product, expfreq, basis_log_mutual_information)
 
@@ -166,17 +143,9 @@ def get_mutual_information(data, number_output_functions=1, min_n_datapoints_a_b
             actual_list_of_df = list_of_data_frames  # we can return this instead of None
         else:  # permutation test ---> values come to the list to make a distribution:
             total_MI_for_each_permutation.append(sum(sum_list))
-<<<<<<< HEAD
-        t_end=time.time()
-        print("cnt:", cnt, "Took:",t_end-t_start)
-
-    if perm_test_flag==False:
-        return list_of_data_frames, actual_total_MI,None   ,     None       ,         None
-=======
 
     if perm_test_flag == False:
         return list_of_data_frames, actual_total_MI, None, None, None
->>>>>>> 93fe218 (vectorized implementation of MI)
     else:
         avg_MI_permute = sum(total_MI_for_each_permutation) / len(total_MI_for_each_permutation)
         pvalue = np.sum(np.array(total_MI_for_each_permutation) > actual_total_MI) / len(

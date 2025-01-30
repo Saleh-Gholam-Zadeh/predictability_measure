@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
     config = """
     learn:
-      epochs: 40
+      epochs: 10
       batch_size: 450
       lr: 0.0001
       save_model: True
@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
     data_reader:
       context_size: 50
-      pred_len: 10
+      pred_len: 1
       n_features: 1
     """
 

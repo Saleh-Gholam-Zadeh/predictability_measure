@@ -101,8 +101,8 @@ def calculate_MI_job(data, number_output_functions=1, min_n_datapoints_a_bin = N
     if num_op_cpus ==None or num_op_cpus > multiprocessing.cpu_count() -1:
         num_op_cpus = int(multiprocessing.cpu_count()-1)
 
-    print("________________________________________________________________________________________________")
-    print("started cnt:{} and num_op_cpus:{}".format(cnt,num_op_cpus))
+    # print("________________________________________________________________________________________________")
+    # print("started cnt:{} and num_op_cpus:{}".format(cnt,num_op_cpus))
 
     # Calulate the Shannon mutual information
 
@@ -233,8 +233,8 @@ def calculate_MI_job(data, number_output_functions=1, min_n_datapoints_a_bin = N
         else:
             raise Exception("Sorry, a wrong combinations")
 
-        print("done with cnt:{} inside MI_ijn within {} seconds".format(cnt,time.time()-ts))
-        print("________________________________________________________________________________________________")
+        # print("done with cnt:{} inside MI_ijn within {} seconds".format(cnt,time.time()-ts))
+        # print("________________________________________________________________________________________________")
 
         if perm_test_flag == False:
             return list_of_data_frames, actual_total_MI, None, None, None ,cnt
