@@ -94,7 +94,7 @@ if __name__ == "__main__":
 
 
     data_reader:
-      context_size: 50
+      context_size: 30
       pred_len: 1
       n_features: 1
     """
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     tar_len = cfg["data_reader"]["context_size"]
     n_features = cfg["data_reader"]["n_features"]
     B = 10000
-    N = 10
+    N = 5 # number of permutation, usually 100
     num_ijn_cpus =None
 
 
@@ -359,13 +359,13 @@ if __name__ == "__main__":
                                                                        "pred_len"], perm_test_flag=True, N=N,
                                                                    num_cpus=None)
 
-    print("res_MI_test:", actual_MI_res_te)
+    print("remaining MI on test:", actual_MI_res_te)
     _, actual_MI_res_tr, pval_MI_res_tr, _, perm_list_res_tr = get_parallel_MI(input_res_to_predictability_measures_train_data,
                                                                    number_output_functions=cfg["data_reader"][
                                                                        "pred_len"], perm_test_flag=True, N=N,
                                                                    num_cpus=None)
 
-    print("res_MI_train:",actual_MI_res_tr)
+    print("remaining MI on train set:",actual_MI_res_tr)
     print("==================================== Pearson on test_res ===================================")
     # sum_r_test_res = pearson_test(input_to_predictability_measures_test_data,
     #                               number_output_functions=cfg["data_reader"]["pred_len"])
@@ -373,7 +373,7 @@ if __name__ == "__main__":
     #                                number_output_functions=cfg["data_reader"]["pred_len"])
     sum_r_res_te = parallel_perasonr(input_res_to_predictability_measures_test_data,number_output_functions=cfg["data_reader"]["pred_len"])
     sum_r_res_tr = parallel_perasonr(input_res_to_predictability_measures_train_data,number_output_functions=cfg["data_reader"]["pred_len"])
-    print("pearson_correl_res_test:",sum_r_res_te)
+    # print("pearson_correl on residual of test set:",sum_r_res_te)
 
 
     print("==================================== statistical test on residuals done ===================================")

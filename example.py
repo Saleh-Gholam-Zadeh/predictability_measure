@@ -68,7 +68,7 @@ transformer_arch:
   
 
 data_reader:
-  context_size: 49
+  context_size: 49 
   pred_len: 2
 """
 
