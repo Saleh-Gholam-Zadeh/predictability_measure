@@ -154,14 +154,14 @@ def binning(data , number_output_functions=1,Rho=None): # push it to github
                     last_index = point + 1
             if len(list_points_of_support) > 0:  # test that there is at least one point of support (it can be if there are only constant value up to the first ones which are less than min_n_datapoints_a_bin
                 if list_points_of_support[0] > datapoints[0]:  # add the first value as a point of support if it does not exist (less than min_n_datapoints_a_bin at the beginning)
-                    # list_points_of_support.insert(0, datapoints[0])
-                    list_points_of_support.insert(0, datapoints[0] - np.float32(0.2)) # subtracted by -0.2  [SALEH]
+                    list_points_of_support.insert(0, datapoints[0])
+                    # list_points_of_support.insert(0, datapoints[0] - np.float32(0.2)) # subtracted by -0.2  [SALEH]
                     # print("warning: [SALEH] subtracted the first border by -0.2")
 
             else:
                 list_points_of_support.append(datapoints[0])
-            # list_points_of_support.append(datapoints[-1] + np.float32(0.1))  # Add last point of support such that last data point is included (half open interals in Python!)
-            list_points_of_support.append(datapoints[-1] + np.float32(0.2))  # updated to 0.2 by [SALEH]
+            list_points_of_support.append(datapoints[-1] + np.float32(0.1))  # Add last point of support such that last data point is included (half open interals in Python!)
+            # list_points_of_support.append(datapoints[-1] + np.float32(0.2))  # updated to 0.2 by [SALEH]
             if datapoints[datapoints >= list_points_of_support[-2]].size < min_n_datapoints_a_bin:  # if last bin has not at least min_n_datapoints_a_bin fuse it with the one before the last bin
                 if len(list_points_of_support) > 2:  # Test if there are at least 3 points of support (only two can happen if there only constant values at the beginning and only less than n_min_datapoints_a_bin in the end)
                     list_points_of_support.pop(-2)
