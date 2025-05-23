@@ -285,6 +285,7 @@ def compute_chisq_metric_hist_based_ij(data_x, data_y, boundaries_x, boundaries_
         warnings.warn("Expected frequency matrix contains values less than 5. "
                       "Chi-square test may not be reliable. Consider adjusting binning or combining categories.")
 
+
     # Compute the chi-square statistic (χ²)
     chisq_stat_torch = ((O - E) ** 2 / E).sum()
 

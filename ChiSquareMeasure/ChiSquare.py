@@ -1,5 +1,15 @@
 import numpy as np
 import scipy.stats
+from scipy.stats import chi2
+import random
+import sys
+import os
+import time
+sys.path.append(os.getcwd())
+import random
+from utils.synthetic_data_gen import sin_gen , white_noise
+
+
 
 
 def chisquare_test(data: np.ndarray, min_n_datapoints_a_bin = None, number_output_functions: int=1 , alpha=0.01  ,bonfer: bool= True):
@@ -92,27 +102,31 @@ def chisquare_test(data: np.ndarray, min_n_datapoints_a_bin = None, number_outpu
     indices_principal_feature_values=np.zeros((1, 2))
     cnt_dep = 0
 
-    for j in range(number_output_functions,m):
+    total_dof = 0 #  track the global degrees of freedom
+    total_chisquare_sum = 0 #  accumulate and  track the global chi square test statistic
+    for j in range(number_output_functions,m): # input features j
         if (len(freq_data[j]) > 1) and (len(freq_data[id_output])>1):
             dependent = 0 # Flag for the input feature j if there is a relation to one output-function
-            for id_output in range(0,number_output_functions):
+            for id_output in range(0,number_output_functions): # target feature id_output
                 counter_number_chi_square_tests_relevant_principal_features +=1
-                freq_data_product = np.histogram2d(data[id_output, :], data[j, :],
-                                            bins=(l[id_output], l[j]))[0]
+                freq_data_product = np.histogram2d(data[id_output, :], data[j, :],bins=(l[id_output], l[j]))[0]
                 expfreq = np.outer(freq_data[id_output], freq_data[j]) / n
                 if sum(expfreq.flatten() < 5) > 0:
                     counter_bins_less_than5_relevant_principal_features += 1
                 if sum(expfreq.flatten() < 1) > 0:
                     counter_bins_less_than1_relevant_principal_features += 1
-                pv = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten(),ddof=(freq_data_product.shape[0]-1)+(freq_data_product.shape[1]-1))[1]
-                pval_list.append(pv)
+                chisquare_ij,pv_ij = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten(),ddof=(freq_data_product.shape[0]-1)+(freq_data_product.shape[1]-1)) # [1]
+                total_chisquare_sum += chisquare_ij
+                total_dof += (freq_data_product.shape[0]-1)*(freq_data_product.shape[1]-1)
+                pval_list.append(pv_ij)
+
                 # According to the documentation of scipy.stats.chisquare, the degrees of freedom is k-1 - ddof where ddof=0 by default and k=freq_data_product.shape[0]*freq_data_product.shape[0].
                 # According to literatur, the chi square test statistic for a test of independence (r x m contingency table) is approximately chi square distributed (under some assumptions) with degrees of freedom equal
                 # freq_data_product.shape[0]-1)*(freq_data_product.shape[1]-1) = freq_data_product.shape[0]*freq_data_product.shape[1] - freq_data_product.shape[0] - freq_data_product.shape[1] + 1.
                 # Consequently, ddof is set equal freq_data_product.shape[0]-1+freq_data_product.shape[1]-1 to adjust the degrees of freedom accordingly.
 
                 # if p-value pv is less than alpha the hypothesis that j is independent of the output function is rejected
-                if pv <= alpha:
+                if pv_ij <= alpha:
                     dependent=1 # if the current feature is related to any of the outputs then it would become 1
                     cnt_dep += 1 # it counts the current feature is related to how many of the outputs. it is integer between 0 to num_output
                     #break
@@ -124,7 +138,57 @@ def chisquare_test(data: np.ndarray, min_n_datapoints_a_bin = None, number_outpu
             intermediate_list_not_depending_on_system_state.append(j)
             pv=1.1
         #indices_principal_feature_values= np.concatenate((indices_principal_feature_values, np.array([j, pv]).reshape((1, 2))), axis=0)
-        indices_principal_feature_values = np.concatenate((indices_principal_feature_values, np.array([j, pv]).reshape((1, 2))), axis=0)
+        indices_principal_feature_values = np.concatenate((indices_principal_feature_values, np.array([j, pv_ij]).reshape((1, 2))), axis=0)
+    p_value_global = 1 - chi2.cdf(total_chisquare_sum, df=total_dof)
 
 
-    return intermediate_list_depending_on_system_state,pval_list,cnt_dep , counter_bins_less_than5_relevant_principal_features, counter_bins_less_than1_relevant_principal_features
+    return intermediate_list_depending_on_system_state,pval_list,cnt_dep , counter_bins_less_than5_relevant_principal_features, counter_bins_less_than1_relevant_principal_features, total_chisquare_sum,  p_value_global
+
+
+
+if __name__ == "__main__":
+
+    # torch.manual_seed(2)
+    random.seed(2)
+    np.random.seed(2)
+
+    # print("Testing chisquare test...")
+    ctx_len = 49
+    tar_len = 1
+    n_features = 1
+    B = 5000
+
+    number_output_functions = tar_len * n_features
+
+    noise    = white_noise(B,(ctx_len+tar_len)*n_features).reshape(B,(ctx_len+tar_len)*n_features) ## a timeseries of shape [B,50,1]
+    clean_signal = sin_gen(B,(ctx_len+tar_len)*n_features).reshape(B,(ctx_len+tar_len)*n_features) # a timeseries of shape [B,50,1]
+    operational_data = 0.2 * noise +  clean_signal # a timeseries of shape [B,70,1]
+    #print(operational_data.shape)
+
+
+    def circular_shift_features(data, t):
+        # m = data.shape[0]  # number of features
+        # n = data.shape[1]  # number of data points
+
+        # Perform circular shift on the features
+        shifted_data = np.roll(data, t, axis=0)
+
+        return shifted_data
+
+    operational_data = circular_shift_features( operational_data.swapaxes(0, 1), number_output_functions)
+    #print("parallel binning...")
+
+    # Create a list of parameter tuples for each job
+    print("starting chisquare ...")
+    t1 = time.time()
+    dep_list, pval, number_of_dependent ,bin1,bin5 , total_chisq,pv_global = chisquare_test(operational_data,number_output_functions= number_output_functions)
+    print("dep_pairs (i,j):",dep_list)
+    print("pval:",pval)
+    print("number_of_dependent",number_of_dependent)
+    print("bin_less_than_5:",bin5)
+    print("bin_less_than_1:", bin1)
+    print("total_chisq:",total_chisq)
+    print("pv_global:",pv_global)
+
+    t2 = time.time()
+    print("Took: ",t2-t1)
