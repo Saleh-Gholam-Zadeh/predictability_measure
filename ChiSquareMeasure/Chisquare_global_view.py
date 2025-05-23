@@ -177,11 +177,10 @@ def compute_chisq_metric_hist_based_total(data_x, data_y, boundaries_x, boundari
     '''
     Compute the chi-squared sum  for stochastic dependence between all input and output variables.
         Args:
-        data_x (torch.Tensor): Input data for variable X (shape = [N]).
-        data_y (torch.Tensor): Input data for variable Y (shape = [N]).
+        data_x (torch.Tensor): Input data for variable X (shape = [N,T_x]).]).
+        data_y (torch.Tensor): Input data for variable Y (shape = [N,T_y]).]).
         boundaries_x (list): Discretization boundaries (bins) for X.
         boundaries_y (list): Discretization boundaries (bins) for Y.
-        sigma (float): Gaussian kernel smoothing parameter.
 
     Returns:
         total_chisq_loss (torch.Tensor): The chi-squared-based loss for the pair (x, y).
