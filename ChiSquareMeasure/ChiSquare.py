@@ -142,7 +142,7 @@ def chisquare_test(data: np.ndarray, min_n_datapoints_a_bin = None, number_outpu
     p_value_global = 1 - chi2.cdf(total_chisquare_sum, df=total_dof)
 
 
-    return intermediate_list_depending_on_system_state,pval_list,cnt_dep , counter_bins_less_than5_relevant_principal_features, counter_bins_less_than1_relevant_principal_features, total_chisquare_sum,  p_value_global
+    return intermediate_list_depending_on_system_state,pval_list,cnt_dep , counter_bins_less_than5_relevant_principal_features, counter_bins_less_than1_relevant_principal_features, total_chisquare_sum, total_dof ,p_value_global
 
 
 
@@ -181,13 +181,14 @@ if __name__ == "__main__":
     # Create a list of parameter tuples for each job
     print("starting chisquare ...")
     t1 = time.time()
-    dep_list, pval, number_of_dependent ,bin1,bin5 , total_chisq,pv_global = chisquare_test(operational_data,number_output_functions= number_output_functions)
+    dep_list, pval, number_of_dependent ,bin1,bin5 , total_chisq,total_dof,pv_global = chisquare_test(operational_data,number_output_functions= number_output_functions)
     print("dep_pairs (i,j):",dep_list)
     print("pval:",pval)
     print("number_of_dependent",number_of_dependent)
     print("bin_less_than_5:",bin5)
     print("bin_less_than_1:", bin1)
     print("total_chisq:",total_chisq)
+    print("total_dof:", total_dof)
     print("pv_global:",pv_global)
 
     t2 = time.time()

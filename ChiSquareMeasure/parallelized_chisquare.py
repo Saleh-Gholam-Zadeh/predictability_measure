@@ -18,6 +18,8 @@ import pandas as pd
 from itertools import product
 import concurrent.futures
 import psutil
+from scipy.stats import chi2
+
 
 
 
@@ -75,20 +77,20 @@ def compute_pairwise_chisq(batch):
                 bins_less_than1 = 1
             # print("debug_parallel .... freq_data_product.shape:",freq_data_product.shape)
             # print("debug_parallel .... freq_data_product:", freq_data_product)
-            pv = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten(),ddof=(freq_data_product.shape[0] - 1) + (freq_data_product.shape[1] - 1))[1]
-            #pval_list.append(pv)
-            if pv <= alpha:
+            chisq_ij , pv_ij = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten(),ddof=(freq_data_product.shape[0] - 1) + (freq_data_product.shape[1] - 1))
+            dof_ij = (freq_data_product.shape[0] - 1) * (freq_data_product.shape[1] - 1)
+            if pv_ij <= alpha:
                 dependent = 1
                 #cnt_dep += 1
         else:
-            pv = 1.1
+            pv_ij = 1.1
             dependent = 0
 
         # if dependent == 1:
         #     intermediate_list_depending_on_system_state.append(j)
         # else:
         #     intermediate_list_not_depending_on_system_state.append(j)
-        results.append(  ((j, id_output), dependent, pv , bins_less_than5 ,bins_less_than1)    )
+        results.append(  ((j, id_output), dependent, pv_ij , bins_less_than5 ,bins_less_than1, chisq_ij, dof_ij )    )
 
     #return (j, id_output), dependent, pv , bins_less_than5 ,bins_less_than1
     return results
@@ -214,22 +216,28 @@ def run_parallel_chisquare_test(data ,min_n_datapoints_a_bin = None, number_outp
         results = pool.map(compute_pairwise_chisq, [(alpha_n_data, batch) for batch in batches])
 
     #raw_results = list(map(compute_pairwise_chisq, pairs))
-
+    total_dof = 0
+    total_chisq = 0
     for batch_results in results:
         for res in batch_results:
-            (id_in,id_out), dep, pv, bin_less5, bin_less1  = res
+            (id_in,id_out), dep_ij, pv_ij, bin_less5_ij, bin_less1_ij, chisq_ij,dof_ij  = res
 
-            pval_list.append((pv, id_in, id_out))
-            if dep:
+            pval_list.append((pv_ij, id_in, id_out))
+            if dep_ij:
                 dep_list.append((id_in,id_out))
 
-            if bin_less5:
+            if bin_less5_ij:
                 bins_less_than5_relevant_principal_features_ids.append((id_in,id_out))
 
-            if bin_less1:
+            if bin_less1_ij:
                 bins_less_than1_relevant_principal_features_ids.append((id_in,id_out))
 
-    return dep_list,pval_list,bins_less_than5_relevant_principal_features_ids ,bins_less_than1_relevant_principal_features_ids
+            total_dof += dof_ij
+            total_chisq += chisq_ij
+            p_value_global = 1 - chi2.cdf(total_chisq, df=total_dof)
+
+
+    return dep_list,pval_list,bins_less_than5_relevant_principal_features_ids ,bins_less_than1_relevant_principal_features_ids, total_chisq,total_dof,p_value_global
 
 
 
@@ -277,11 +285,14 @@ if __name__ == "__main__":
     # Create a list of parameter tuples for each job
     print("starting parallel chisquare")
     t1 = time.time()
-    dep_list, pval, bin1,bin5 = run_parallel_chisquare_test(operational_data,number_output_functions= number_output_functions)
+    dep_list, pval, bin1,bin5 , total_chisq , total_dof , pv_global = run_parallel_chisquare_test(operational_data,number_output_functions= number_output_functions)
     print("dep_pairs (i,j):",dep_list)
     print("(pvl,i,j):",pval)
     print("bin_less_than_5:",bin5)
     print("bin_less_than_1:", bin1)
+    print("total_chisq:",total_chisq)
+    print("total_dof:",total_dof)
+    print("pv_global:",pv_global)
     t2 = time.time()
     print(t2-t1)
 
