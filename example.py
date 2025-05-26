@@ -149,8 +149,8 @@ input_to_predictability_measures_train_data  = circular_shift_features( convert_
 
 print("=========================  initial Chi-square test & train  ===================================")
 
-results0, pvl0, cnt_dep0 , _,_ = chisquare_test(input_to_predictability_measures_test_data ,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
-results1, pvl1,cnt_dep1  , _,_ = chisquare_test(input_to_predictability_measures_train_data,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
+results0, pvl0, cnt_dep0 , _,_, total_chisq,total_dof,pv_global       = chisquare_test(input_to_predictability_measures_test_data ,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
+results1, pvl1,cnt_dep1  , _,_ ,total_chisq_1,total_dof_1,pv_global_1 = chisquare_test(input_to_predictability_measures_train_data,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
 
 # print("Initial chisquare on test set shows dependency on the following variables ", results0)
 # print('Number of dependent variables on test set (pairwise):', cnt_dep0)
@@ -224,9 +224,9 @@ input_to_predictability_measures_train_data  = circular_shift_features( convert_
 
 
 print(" ======================chi-square on residual_test:=============================")
-results2, pvl2 ,cnt_dep2,_,_ = chisquare_test(input_to_predictability_measures_test_data,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
+results2, pvl2 ,cnt_dep2,_,_ ,total_chisq_2,total_dof_2,pv_global_2 = chisquare_test(input_to_predictability_measures_test_data,number_output_functions= cfg["data_reader"]["pred_len"],  bonfer=True)
 
-results3, pvl3, cnt_dep3,_,_ = chisquare_test(input_to_predictability_measures_train_data,number_output_functions= cfg["data_reader"]["pred_len"], bonfer=True)
+results3, pvl3, cnt_dep3,_,_ ,total_chisq_3,total_dof_3,pv_global_3 = chisquare_test(input_to_predictability_measures_train_data,number_output_functions= cfg["data_reader"]["pred_len"], bonfer=True)
 
 
 print("=========================MI and permutation-test on residual_test ============================")
