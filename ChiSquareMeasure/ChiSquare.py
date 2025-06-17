@@ -140,6 +140,8 @@ def chisquare_test(data: np.ndarray, min_n_datapoints_a_bin = None, number_outpu
         #indices_principal_feature_values= np.concatenate((indices_principal_feature_values, np.array([j, pv]).reshape((1, 2))), axis=0)
         indices_principal_feature_values = np.concatenate((indices_principal_feature_values, np.array([j, pv_ij]).reshape((1, 2))), axis=0)
     p_value_global = 1 - chi2.cdf(total_chisquare_sum, df=total_dof)
+    if counter_bins_less_than5_relevant_principal_features > 0:
+        warnings.warn(f"Chi-square approximation may be incorrect in {counter_bins_less_than5_relevant_principal_features} tests . Expected frequencies should be >= 5 in all cells.")
 
 
     return intermediate_list_depending_on_system_state,pval_list,cnt_dep , counter_bins_less_than5_relevant_principal_features, counter_bins_less_than1_relevant_principal_features, total_chisquare_sum, total_dof ,p_value_global
