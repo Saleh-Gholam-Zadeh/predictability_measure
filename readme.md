@@ -42,12 +42,15 @@ Citation
 If you find our work useful, please consider citing our paper:
 
 ```bibtex
-@article{saleh2024towards,
-  title = {Towards Measuring Predictability: To which extent datadriven approaches can extract deterministic relations from data exemplified with time series prediction and classification},
-  author = {Saleh, Gholam Zadeh and Vaisakh Shaj and Gerhard Neumann and Tim Breitenbach},
-  journal = {Transactions on Machine Learning Research},
-  year = {2024},
-  url = {https://openreview.net/forum?id=jZBAVFGUUo&noteId=LEMTDMLbq7}
+@article{
+zadeh2025towards,
+title={Towards Measuring Predictability: To which extent data-driven approaches can extract deterministic relations from data exemplified with time series prediction and classification},
+author={Saleh GHOLAM ZADEH and Vaisakh Shaj and Patrick Jahnke and Gerhard Neumann and Tim Breitenbach},
+journal={Transactions on Machine Learning Research},
+issn={2835-8856},
+year={2025},
+url={https://openreview.net/forum?id=jZBAVFGUUo},
+note={}
 }
 ```
 
