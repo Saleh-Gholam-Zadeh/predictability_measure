@@ -148,7 +148,7 @@ def get_mutual_information(data, number_output_functions=1, min_n_datapoints_a_b
         return list_of_data_frames, actual_total_MI, None, None, None
     else:
         avg_MI_permute = sum(total_MI_for_each_permutation) / len(total_MI_for_each_permutation)
-        pvalue = np.sum(np.array(total_MI_for_each_permutation) > actual_total_MI) / len(
+        pvalue = np.sum(np.array(total_MI_for_each_permutation) >= actual_total_MI) / len(
             total_MI_for_each_permutation)
         return None, actual_total_MI, pvalue, avg_MI_permute, total_MI_for_each_permutation
 # def get_mutual_information_old(data, number_output_functions=1, min_n_datapoints_a_bin = None, perm_test_flag=True, N=10):
@@ -290,5 +290,5 @@ def get_mutual_information(data, number_output_functions=1, min_n_datapoints_a_b
 #         return list_of_data_frames, actual_total_MI,None   ,     None       ,         None
 #     else:
 #         avg_MI_permute = sum(total_MI_for_each_permutation) / len(total_MI_for_each_permutation)
-#         pvalue = np.sum(np.array(total_MI_for_each_permutation) > actual_total_MI)/len(total_MI_for_each_permutation)
+#         pvalue = np.sum(np.array(total_MI_for_each_permutation) >= actual_total_MI)/len(total_MI_for_each_permutation)
 #         return None,                actual_total_MI, pvalue, avg_MI_permute  ,total_MI_for_each_permutation
