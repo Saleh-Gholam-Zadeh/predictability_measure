@@ -307,7 +307,7 @@ def get_parallel_MI(operational_data,number_output_functions,perm_test_flag,N,nu
             perm_list_ijn.append(perm_MI[0])
 
     avg_MI_permute = sum(perm_list_ijn) / len(perm_list_ijn)
-    pvalue = np.sum(np.array(perm_list_ijn) > actual_ijn_MI) / len(perm_list_ijn)
+    pvalue = np.sum(np.array(perm_list_ijn) >= actual_ijn_MI) / len(perm_list_ijn)
 
     return  None, actual_ijn_MI, pvalue, avg_MI_permute, perm_list_ijn
 
